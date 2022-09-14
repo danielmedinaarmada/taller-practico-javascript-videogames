@@ -8,6 +8,10 @@ const btnDown = document.querySelector("#down");
 const game = canvas.getContext("2d");
 let canvasSize;
 let elementSize;
+const playerPosition = {
+  x:undefined,
+  y:undefined,
+}
 
 window.addEventListener("load", setCanvasSize);
 window.addEventListener("resize", setCanvasSize);
@@ -43,10 +47,24 @@ function startGame() {
       const emoji = emojis[col];
       const posX = elementSize * (colI + 1);
       const posY = elementSize * (rowI + 1);
+
+      if (col == 'O'){
+        playerPosition.x = posX;
+        playerPosition.y = posY;
+        console.log({playerPosition});
+      }
+
       game.fillText(emoji, posX, posY);
     });
   });
+
+  movePlayer();
 }
+
+function movePlayer(){
+  game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
+}
+
 
 window.addEventListener("keydown", moveByKeys);
 btnUp.addEventListener("click", moveUp);
@@ -64,16 +82,24 @@ function moveByKeys(event) {
 
 function moveUp() {
   console.log("Me quiero mover hacia arriba");
+  playerPosition.y -= elementSize;
+  movePlayer();
 }
 
 function moveLeft() {
   console.log("Me quiero mover hacia la izquierda");
+  playerPosition.x -= elementSize;
+  movePlayer();
 }
 
 function moveRight() {
   console.log("Me quiero mover hacia la derecha");
+  playerPosition.x += elementSize;
+  movePlayer();
 }
 
 function moveDown() {
   console.log("Me quiero mover hacia abajo");
+  playerPosition.y += elementSize;
+  movePlayer();
 }
