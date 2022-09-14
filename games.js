@@ -9,6 +9,7 @@ const game = canvas.getContext("2d");
 let canvasSize;
 let elementSize;
 let level = 0;
+let lives = 3;
 const playerPosition = {
   x: undefined,
   y: undefined,
@@ -40,7 +41,7 @@ function setCanvasSize() {
 }
 
 function startGame() {
-  console.log({ canvasSize, elementSize });
+  //console.log({ canvasSize, elementSize });
 
   game.font = elementSize + "px Verdana";
   game.textAlign = "end";
@@ -54,7 +55,7 @@ function startGame() {
 
   const mapRows = map.trim().split("\n");
   const mapRowCols = mapRows.map((row) => row.trim().split(""));
-  console.log({ map, mapRows, mapRowCols });
+  //console.log({ map, mapRows, mapRowCols });
 
   //vamos a borrar todo
   game.clearRect(0, 0, canvasSize, canvasSize);
@@ -70,12 +71,12 @@ function startGame() {
         if (!playerPosition.x && !playerPosition.y) {
           playerPosition.x = posX;
           playerPosition.y = posY;
-          console.log({ playerPosition });
+          //console.log({ playerPosition });
         }
       } else if (col == "I") {
         giftPosition.x = posX;
         giftPosition.y = posY;
-        console.log({ giftPosition });
+        //console.log({ giftPosition });
       } else if ((col == "X")) {
         enemyPositions.push({
           x: posX,
@@ -93,8 +94,8 @@ function startGame() {
 function movePlayer() {
   
   //Si conseguimos el regalo
-  const giftCollisionX = playerPosition.x.toFixed(4) == giftPosition.x.toFixed(4);
-  const giftCollisionY = playerPosition.y.toFixed(4) == giftPosition.y.toFixed(4);
+  const giftCollisionX = playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3);
+  const giftCollisionY = playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3);
   const giftCollision = giftCollisionX && giftCollisionY;
   
   if (giftCollision) {
@@ -103,13 +104,13 @@ function movePlayer() {
   
   //Si chocamos con una bomba
   const enemyCollision = enemyPositions.find(enemy => {
-    const enemyCollisionX = enemy.x.toFixed(4) == playerPosition.x.toFixed(4);
-    const enemyCollisionY = enemy.y.toFixed(4) == playerPosition.y.toFixed(4);
+    const enemyCollisionX = enemy.x.toFixed(3) == playerPosition.x.toFixed(3);
+    const enemyCollisionY = enemy.y.toFixed(3) == playerPosition.y.toFixed(3);
     return enemyCollisionX && enemyCollisionY;
   })
   
   if (enemyCollision) {
-    console.log("Chocaste contra una bomba!");
+    levelFail();
   }
   
   game.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
@@ -125,6 +126,22 @@ function gameWin(){
   console.log('¡Terminaste el juego!');
 }
 
+function levelFail(){
+  console.log("Chocaste contra una bomba!");
+  lives--;
+  
+console.log(lives);
+
+  if (lives <= 0) {
+    level = 0;
+    lives = 3;
+  }
+
+  playerPosition.x = undefined;
+  playerPosition.y = undefined;
+  startGame();
+
+}
 
 window.addEventListener("keydown", moveByKeys);
 btnUp.addEventListener("click", moveUp);
