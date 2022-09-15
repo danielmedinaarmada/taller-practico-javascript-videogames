@@ -4,6 +4,7 @@ const btnUp = document.querySelector("#up");
 const btnLeft = document.querySelector("#left");
 const btnRight = document.querySelector("#right");
 const btnDown = document.querySelector("#down");
+const spanlives = document.querySelector("#lives");
 
 const game = canvas.getContext("2d");
 let canvasSize;
@@ -56,6 +57,8 @@ function startGame() {
   const mapRows = map.trim().split("\n");
   const mapRowCols = mapRows.map((row) => row.trim().split(""));
   //console.log({ map, mapRows, mapRowCols });
+
+  showLives();
 
   //vamos a borrar todo
   game.clearRect(0, 0, canvasSize, canvasSize);
@@ -126,11 +129,19 @@ function gameWin(){
   console.log('¡Terminaste el juego!');
 }
 
+function showLives(){
+  const heartsArray = Array(lives).fill(emojis.HEART); // crear un array con las posiciones que dice lives
+  //console.log({heartsArray});
+
+  spanlives.innerHTML="";
+  heartsArray.forEach(heart => spanlives.append(heart));
+  
+  console.log(lives);
+}
+
 function levelFail(){
   console.log("Chocaste contra una bomba!");
   lives--;
-  
-console.log(lives);
 
   if (lives <= 0) {
     level = 0;
