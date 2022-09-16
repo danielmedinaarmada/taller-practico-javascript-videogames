@@ -35,15 +35,27 @@ window.addEventListener("resize", setCanvasSize);
 
 function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
-    canvasSize = window.innerWidth * 0.8;
+    canvasSize = window.innerWidth * 0.7;
   } else {
-    canvasSize = window.innerHeight * 0.8;
+    canvasSize = window.innerHeight * 0.7;
   }
+
+  canvasSize = Number(canvasSize.toFixed(0));
 
   canvas.setAttribute("width", canvasSize);
   canvas.setAttribute("height", canvasSize);
 
   elementSize = canvasSize / 10;
+
+  //como lpayerPosition no se refrescan los valores, luego del reside
+  //por la validacion del if, !playerPosition.x && !playerPosition.y
+  // una opción es matarlo,
+  
+  //Claro hay que tener cuidado cuando hacemos resice, ya que las playerPosition.x e y,
+  // le asiganariamos los valores iniciales de su posicion, mas no, donde esta ahora
+
+  playerPosition.x = undefined;
+  playerPosition.y = undefined;
 
   startGame();
 }
@@ -146,7 +158,6 @@ function gameWin() {
   const recordTime = localStorage.getItem("record_time");
   const playerTime = Date.now() - timeStart;
   if (recordTime) {
-    debugger;
     if (recordTime >= playerTime) {
       //nuevo Record
       localStorage.setItem("record_time", playerTime);
