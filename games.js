@@ -4,13 +4,19 @@ const btnUp = document.querySelector("#up");
 const btnLeft = document.querySelector("#left");
 const btnRight = document.querySelector("#right");
 const btnDown = document.querySelector("#down");
-const spanlives = document.querySelector("#lives");
+const spanLives = document.querySelector("#lives");
+const spanTime = document.querySelector("#time");
 
 const game = canvas.getContext("2d");
 let canvasSize;
 let elementSize;
 let level = 0;
 let lives = 3;
+let timeStart;
+let timePlayer;
+let timeInterval;
+
+
 const playerPosition = {
   x: undefined,
   y: undefined,
@@ -52,6 +58,11 @@ function startGame() {
   if(!map){
     gameWin();
     return;
+  }
+
+  if(!timeStart){
+    timeStart = Date.now();
+    timeInterval = setInterval(showTime, 100);
   }
 
   const mapRows = map.trim().split("\n");
@@ -127,16 +138,21 @@ function levelWin(){
 
 function gameWin(){
   console.log('¡Terminaste el juego!');
+  clearInterval(timeInterval);
 }
 
 function showLives(){
   const heartsArray = Array(lives).fill(emojis.HEART); // crear un array con las posiciones que dice lives
   //console.log({heartsArray});
 
-  spanlives.innerHTML="";
-  heartsArray.forEach(heart => spanlives.append(heart));
+  spanLives.innerHTML="";
+  heartsArray.forEach(heart => spanLives.append(heart));
   
   console.log(lives);
+}
+
+function showTime(){
+  spanTime.innerHTML = Date.now()-timeStart;
 }
 
 function levelFail(){
@@ -146,6 +162,7 @@ function levelFail(){
   if (lives <= 0) {
     level = 0;
     lives = 3;
+    timeStart = undefined;
   }
 
   playerPosition.x = undefined;
